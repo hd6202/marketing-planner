@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>마케팅 플래너 2026</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #fff;
+  --border: #e8e8e8;
+  --bl: #f2f2f2;
+  --text: #111;
+  --sec: #6b6b6b;
+  --lt: #bbb;
+  --acc: #1d3826;
+  --do-c: #a06000;
+  --do-bg: #fdf6e8;
+  --do-br: #e0a830;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, 'Apple SD Gothic Neo', 'Segoe UI', Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  padding: 52px 60px 80px;
+}
+
+/* ── Header ── */
+.ph { max-width: 1160px; margin: 0 auto; }
+.ph h1 { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 5px; }
+.ph p  { font-size: 0.82rem; color: var(--sec); }
+
+/* ── Main Tabs ── */
+.tabs-bar {
+  max-width: 1160px; margin: 26px auto 0;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-end; justify-content: space-between;
+}
+.tabs { display: flex; }
+.tab-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 10px 18px; margin-bottom: -1px;
+  font-size: 0.875rem; font-weight: 500; color: var(--lt);
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.tab-btn:hover { color: var(--sec); }
+.tab-btn.active { color: var(--text); font-weight: 700; border-bottom-color: var(--acc); }
+
+/* Progress */
+.prog-pill { display: flex; align-items: center; gap: 10px; padding-bottom: 10px; }
+.prog-text { font-size: .78rem; color: var(--sec); white-space: nowrap; }
+.prog-track { width: 80px; height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.prog-fill  { height: 100%; background: var(--acc); border-radius: 99px; transition: width .4s; }
+.prog-pct   { font-size: .78rem; font-weight: 700; color: var(--acc); min-width: 30px; }
+
+/* ── Views ── */
+.view { display: none; }
+.view.active { display: block; }
+.vi { max-width: 1160px; margin: 36px auto 0; }
+
+/* ── Sub-tabs ── */
+.sub-bar {
+  display: flex; border-bottom: 1px solid var(--border); margin-bottom: 30px;
+  overflow-x: auto;
+}
+.sub-bar::-webkit-scrollbar { display: none; }
+.sub-btn {
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 8px 16px; margin-bottom: -1px;
+  font-size: .82rem; font-weight: 500; color: var(--lt);
+  cursor: pointer; font-family: inherit; white-space: nowrap;
+  transition: color .15s, border-color .15s;
+}
+.sub-btn:hover { color: var(--sec); }
+.sub-btn.active { color: var(--text); font-weight: 700; border-bottom-color: var(--acc); }
+
+/* ── Annual ── */
+.ag { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; }
+
+.a-title {
+  font-size: 1.5rem; font-weight: 700; letter-spacing: -0.02em;
+  display: block; margin-bottom: 18px;
+  padding-bottom: 14px; border-bottom: 2px solid var(--text);
+}
+
+.mission-area {
+  width: 100%; min-height: 200px;
+  border: none; outline: none; resize: none;
+  font-family: inherit; font-size: .95rem; line-height: 1.8;
+  color: var(--text); background: none;
+}
+.mission-area::placeholder { color: var(--lt); }
+
+.goal-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 0; border-bottom: 1px solid var(--bl);
+}
+.goal-row:first-child { border-top: 1px solid var(--bl); }
+.goal-num { font-size: .7rem; font-weight: 700; color: var(--lt); min-width: 20px; padding-top: 2px; }
+.goal-input {
+  flex: 1; border: none; outline: none; font-family: inherit;
+  font-size: .88rem; color: var(--text); background: none; line-height: 1.5;
+}
+.goal-input::placeholder { color: var(--lt); }
+.goal-del {
+  background: none; border: none; color: var(--lt); cursor: pointer;
+  font-size: 1rem; opacity: 0; transition: opacity .15s, color .15s;
+  padding: 0; line-height: 1;
+}
+.goal-row:hover .goal-del { opacity: 1; }
+.goal-del:hover { color: #c0392b; }
+.add-goal-btn {
+  background: none; border: none; cursor: pointer; color: var(--lt);
+  font-size: .82rem; font-family: inherit;
+  padding: 10px 0 0; display: flex; align-items: center; gap: 6px;
+  transition: color .15s;
+}
+.add-goal-btn:hover { color: var(--acc); }
+
+/* ── Board (shared Q + M) ── */
+.board { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); border-top: 2px solid var(--text); }
+.col {
+  padding: 24px 28px 28px 0; border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+}
+.col:first-child { padding-left: 0; }
+.col:nth-last-child(2) { border-right: none; padding-right: 0; }
+.col:not(:first-child) { padding-left: 28px; }
+.col-hd { margin-bottom: 14px; }
+.col-title-wrap { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+.col-title {
+  font-size: 1rem; font-weight: 700; color: var(--text);
+  outline: none; flex: 1; min-width: 0; cursor: text;
+}
+.col-title:focus { border-bottom: 1.5px solid var(--acc); }
+.col-count { font-size: .75rem; color: var(--lt); }
+.cat-del {
+  background: none; border: none; color: var(--lt); cursor: pointer;
+  font-size: .9rem; opacity: 0; flex-shrink: 0; padding: 0; line-height: 1;
+  transition: opacity .15s, color .15s;
+}
+.col-hd:hover .cat-del { opacity: 1; }
+.cat-del:hover { color: #c0392b; }
+.add-cat-row { grid-column: 1 / -1; padding: 16px 0 4px; border-top: 1px solid var(--border); }
+.add-cat-btn {
+  background: none; border: none; cursor: pointer; color: var(--lt);
+  font-size: .82rem; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: color .15s; padding: 0;
+}
+.add-cat-btn:hover { color: var(--acc); }
+.task-list { display: flex; flex-direction: column; flex: 1; }
+
+/* ── Task Item ── */
+.task-item { border-bottom: 1px solid var(--bl); }
+.task-item:first-child { border-top: 1px solid var(--bl); }
+.task-main { display: flex; align-items: center; gap: 8px; padding: 9px 0; }
+
+.status-btn {
+  flex-shrink: 0; border: 1.5px solid var(--border); background: none;
+  border-radius: 3px; font-size: .62rem; font-weight: 700;
+  padding: 2px 6px; cursor: pointer; color: var(--lt);
+  white-space: nowrap; font-family: inherit;
+  transition: background .15s, border-color .15s, color .15s;
+}
+.status-btn[data-s="todo"]  { border-color: var(--border); color: var(--lt); }
+.status-btn[data-s="doing"] { border-color: var(--do-br); color: var(--do-c); background: var(--do-bg); }
+.status-btn[data-s="done"]  { border-color: var(--acc); background: var(--acc); color: #fff; }
+
+.task-text-btn {
+  flex: 1; background: none; border: none; padding: 0;
+  text-align: left; cursor: pointer; font-family: inherit; min-width: 0;
+}
+.task-text {
+  font-size: .88rem; font-weight: 400; line-height: 1.5;
+  color: var(--text); word-break: break-word; display: block;
+}
+.task-item[data-s="done"] .task-text { text-decoration: line-through; color: var(--lt); }
+
+.expand-arr {
+  color: var(--lt); font-size: .6rem; flex-shrink: 0;
+  transition: transform .2s; pointer-events: none; user-select: none;
+}
+.task-item.open .expand-arr { transform: rotate(180deg); }
+
+.task-del {
+  background: none; border: none; color: var(--lt); cursor: pointer;
+  font-size: 1rem; opacity: 0; flex-shrink: 0; padding: 0; line-height: 1;
+  transition: opacity .15s, color .15s;
+}
+.task-main:hover .task-del { opacity: 1; }
+.task-del:hover { color: #c0392b; }
+
+/* Detail */
+.task-detail { max-height: 0; overflow: hidden; transition: max-height .28s ease; }
+.task-item.open .task-detail { max-height: 300px; }
+.detail-body { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; padding: 4px 0 14px; }
+.d-field { display: flex; flex-direction: column; gap: 4px; }
+.d-field.sp2 { grid-column: 1/-1; }
+.d-lbl { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--lt); }
+.d-inp, .d-ta {
+  border: none; border-bottom: 1px solid var(--bl); outline: none;
+  font-family: inherit; font-size: .82rem; color: var(--text); background: none;
+  padding: 3px 0 4px; transition: border-color .15s;
+}
+.d-inp:focus, .d-ta:focus { border-bottom-color: var(--acc); }
+.d-inp::placeholder, .d-ta::placeholder { color: var(--lt); }
+.d-ta { resize: none; min-height: 50px; line-height: 1.6; }
+.d-inp[type="date"] { color: var(--sec); }
+
+/* Add row */
+.add-row { display: flex; align-items: center; gap: 6px; padding: 11px 0 0; }
+.add-in {
+  flex: 1; border: none; outline: none; background: none;
+  font-family: inherit; font-size: .85rem; color: var(--text);
+}
+.add-in::placeholder { color: var(--lt); }
+.add-plus {
+  background: none; border: none; color: var(--lt); cursor: pointer;
+  font-size: 1.1rem; line-height: 1; flex-shrink: 0; transition: color .15s;
+}
+.add-plus:hover { color: var(--acc); }
+
+/* ── Weekly ── */
+.week-nav { display: flex; align-items: center; gap: 14px; margin-bottom: 30px; }
+.week-arr {
+  background: none; border: 1px solid var(--border); border-radius: 4px;
+  width: 28px; height: 28px; cursor: pointer; font-size: .8rem;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--sec); transition: border-color .15s, color .15s;
+}
+.week-arr:hover { border-color: var(--text); color: var(--text); }
+.week-lbl { font-size: .95rem; font-weight: 600; letter-spacing: -.01em; }
+
+/* ── Responsive ── */
+@media (max-width: 1040px) {
+  body { padding: 40px 32px 60px; }
+  .ag   { grid-template-columns: 1fr; gap: 44px; }
+  .board { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+}
+@media (max-width: 600px) {
+  body { padding: 28px 18px 60px; }
+  .board { grid-template-columns: 1fr; }
+  .col  { border-right: none; padding: 18px 0 0; border-top: 1px solid var(--border); }
+  .col:first-child { border-top: none; }
+  .tab-btn  { padding: 10px 12px; font-size: .82rem; }
+  .sub-btn  { padding: 8px 10px; }
+  .detail-body { grid-template-columns: 1fr; }
+  .d-field.sp2 { grid-column: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="ph">
+  <h1>Marketing Planner</h1>
+  <p>2026 마케팅팀</p>
+</div>
+
+<div class="tabs-bar">
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="annual">연간</button>
+    <button class="tab-btn" data-tab="quarterly">분기</button>
+    <button class="tab-btn" data-tab="monthly">월간</button>
+    <button class="tab-btn" data-tab="weekly">주간</button>
+  </div>
+  <div class="prog-pill" id="prog-pill" style="display:none">
+    <span class="prog-text" id="prog-text">완료 0 / 전체 0</span>
+    <div class="prog-track"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <span class="prog-pct" id="prog-pct">0%</span>
+  </div>
+</div>
+
+<!-- Annual -->
+<div class="view active" id="view-annual">
+  <div class="vi">
+    <div class="ag">
+      <div>
+        <span class="a-title">미션 & 비전</span>
+        <textarea class="mission-area" id="mission-area"
+          placeholder="마케팅팀의 미션과 비전을 입력하세요&#10;&#10;예) 고객과 브랜드를 연결하는 진정성 있는 마케팅으로&#10;글로벌 아웃도어 시장을 선도한다."></textarea>
+      </div>
+      <div>
+        <span class="a-title">2026 핵심 목표</span>
+        <div id="goal-list"></div>
+        <button class="add-goal-btn" id="add-goal-btn">+ 목표 추가</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Quarterly -->
+<div class="view" id="view-quarterly">
+  <div class="vi">
+    <div class="sub-bar" id="sub-bar-q"></div>
+    <div class="board" id="board-q"></div>
+  </div>
+</div>
+
+<!-- Monthly -->
+<div class="view" id="view-monthly">
+  <div class="vi">
+    <div class="sub-bar" id="sub-bar-m"></div>
+    <div class="board" id="board-m"></div>
+  </div>
+</div>
+
+<!-- Weekly -->
+<div class="view" id="view-weekly">
+  <div class="vi">
+    <div class="week-nav">
+      <button class="week-arr" id="week-prev">&#8592;</button>
+      <span class="week-lbl" id="week-lbl"></span>
+      <button class="week-arr" id="week-next">&#8594;</button>
+    </div>
+    <div class="board" id="week-board"></div>
+  </div>
+</div>
+
+<script>
+const SK = 'mkt-v7';
+localStorage.removeItem('mkt-v5');
+localStorage.removeItem('mkt-v6');
+const Q_KEYS   = ['q1','q2','q3','q4'];
+const Q_LBL    = ['1분기','2분기','3분기','4분기'];
+const M_KEYS   = ['m01','m02','m03','m04','m05','m06','m07','m08','m09','m10','m11','m12'];
+const M_LBL    = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+const DAY_KO   = ['월','화','수','목','금','토','일'];
+
+function uid()  { return Math.random().toString(36).slice(2,9); }
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function baseCats() {
+  return [
+    { id:'global',  title:'글로벌 확장',    tasks:[] },
+    { id:'ai',      title:'AI툴 역량',       tasks:[] },
+    { id:'content', title:'콘텐츠 & 세일즈', tasks:[] },
+    { id:'infra',   title:'인프라 & 하반기', tasks:[] },
+  ];
+}
+function mkTask(text) {
+  return { id:uid(), text, status:'todo', memo:'', assignee:'', deadline:'' };
+}
+function mkCat(title) { return { id:uid(), title, tasks:[] }; }
+function mkQ() {
+  const o = {};
+  Q_KEYS.forEach(k => o[k] = { categories: [] });
+  return o;
+}
+function mkM() {
+  const o = {};
+  M_KEYS.forEach(k => o[k] = { categories: k==='m06' ? baseCats() : [] });
+  return o;
+}
+function defaultData() {
+  return { annual:{ mission:'', goals:[] }, quarterly:mkQ(), monthly:mkM(), weekly:{} };
+}
+
+function load() {
+  try { const s = localStorage.getItem(SK); if (s) return JSON.parse(s); } catch(e) {}
+  return null;
+}
+function save() { localStorage.setItem(SK, JSON.stringify(data)); }
+
+let data = load() || defaultData();
+let curTab   = 'annual';
+let activeQ  = 'q2';
+let activeM  = 'm06';
+let wkOffset = 0;
+
+// ── Tab switching ──
+document.querySelectorAll('.tab-btn').forEach(btn =>
+  btn.addEventListener('click', () => {
+    const t = btn.dataset.tab;
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+    document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-'+t));
+    curTab = t;
+    document.getElementById('prog-pill').style.display = t === 'annual' ? 'none' : 'flex';
+    if (t !== 'annual') refreshProg();
+  })
+);
+
+// ── Progress ──
+function refreshProg() {
+  let total = 0, done = 0;
+  if (curTab === 'quarterly') {
+    data.quarterly[activeQ].categories.forEach(c => { total += c.tasks.length; done += c.tasks.filter(t => t.status==='done').length; });
+  } else if (curTab === 'monthly') {
+    data.monthly[activeM].categories.forEach(c => { total += c.tasks.length; done += c.tasks.filter(t => t.status==='done').length; });
+  } else if (curTab === 'weekly') {
+    const wd = data.weekly[wkKey()];
+    if (wd) wd.categories.forEach(c => { total += c.tasks.length; done += c.tasks.filter(t => t.status==='done').length; });
+  }
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-pct').textContent = pct+'%';
+  document.getElementById('prog-text').textContent = `완료 ${done} / 전체 ${total}`;
+}
+
+// ── Annual ──
+function initAnnual() {
+  document.getElementById('mission-area').value = data.annual.mission || '';
+  renderGoals();
+  document.getElementById('mission-area').addEventListener('input', e => { data.annual.mission = e.target.value; save(); });
+  document.getElementById('goal-list').addEventListener('input', e => {
+    const inp = e.target.closest('.goal-input');
+    if (!inp) return;
+    const g = data.annual.goals.find(x => x.id === inp.dataset.gid);
+    if (g) { g.text = inp.value; save(); }
+  });
+  document.getElementById('goal-list').addEventListener('click', e => {
+    const btn = e.target.closest('.goal-del');
+    if (!btn) return;
+    data.annual.goals = data.annual.goals.filter(g => g.id !== btn.dataset.gid);
+    save(); renderGoals();
+  });
+  document.getElementById('add-goal-btn').addEventListener('click', () => {
+    data.annual.goals.push({ id:uid(), text:'' });
+    save(); renderGoals();
+    const els = document.querySelectorAll('.goal-input');
+    if (els.length) els[els.length-1].focus();
+  });
+}
+function renderGoals() {
+  const list = document.getElementById('goal-list');
+  list.innerHTML = '';
+  data.annual.goals.forEach((g,i) => {
+    const row = document.createElement('div');
+    row.className = 'goal-row';
+    row.innerHTML = `<span class="goal-num">${String(i+1).padStart(2,'0')}</span>
+      <input class="goal-input" type="text" value="${esc(g.text)}" placeholder="목표 입력..." data-gid="${g.id}" />
+      <button class="goal-del" data-gid="${g.id}">×</button>`;
+    list.appendChild(row);
+  });
+}
+
+// ── Quarterly sub-tabs ──
+function initQ() {
+  const bar = document.getElementById('sub-bar-q');
+  Q_KEYS.forEach((k,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'sub-btn' + (k===activeQ?' active':'');
+    btn.textContent = Q_LBL[i];
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#sub-bar-q .sub-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeQ = k; renderQBoard(); refreshProg();
+    });
+    bar.appendChild(btn);
+  });
+  renderQBoard();
+}
+function renderQBoard() { renderBoard('board-q', data.quarterly[activeQ].categories, 'q', activeQ); }
+
+// ── Monthly sub-tabs ──
+function initM() {
+  const bar = document.getElementById('sub-bar-m');
+  M_KEYS.forEach((k,i) => {
+    const btn = document.createElement('button');
+    btn.className = 'sub-btn' + (k===activeM?' active':'');
+    btn.textContent = M_LBL[i];
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#sub-bar-m .sub-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeM = k; renderMBoard(); refreshProg();
+    });
+    bar.appendChild(btn);
+  });
+  renderMBoard();
+}
+function renderMBoard() { renderBoard('board-m', data.monthly[activeM].categories, 'm', activeM); }
+
+// ── Shared Board ──
+function mkColEl(cat, ns, sub) {
+  const done = cat.tasks.filter(t => t.status==='done').length;
+  const col = document.createElement('div');
+  col.className = 'col';
+  col.innerHTML = `
+    <div class="col-hd">
+      <div class="col-title-wrap">
+        <span class="col-title" contenteditable="true" spellcheck="false"
+          data-ns="${ns}" data-sub="${sub}" data-cat="${cat.id}">${esc(cat.title)}</span>
+        <button class="cat-del" data-ns="${ns}" data-sub="${sub}" data-cat="${cat.id}">×</button>
+      </div>
+      <span class="col-count" id="cnt-${ns}-${sub}-${cat.id}">${done} / ${cat.tasks.length} 완료</span>
+    </div>
+    <div class="task-list" id="tl-${ns}-${sub}-${cat.id}"></div>
+    <div class="add-row">
+      <input class="add-in" type="text" placeholder="업무 추가..."
+        data-ns="${ns}" data-sub="${sub}" data-cat="${cat.id}" maxlength="120" />
+      <button class="add-plus" data-ns="${ns}" data-sub="${sub}" data-cat="${cat.id}">+</button>
+    </div>`;
+  const list = col.querySelector('.task-list');
+  cat.tasks.forEach(t => list.appendChild(mkTaskEl(t, ns, sub, cat.id)));
+  return col;
+}
+function renderBoard(boardId, cats, ns, sub) {
+  const board = document.getElementById(boardId);
+  board.innerHTML = '';
+  cats.forEach(cat => board.appendChild(mkColEl(cat, ns, sub)));
+  const addRow = document.createElement('div');
+  addRow.className = 'add-cat-row';
+  addRow.innerHTML = `<button class="add-cat-btn" data-ns="${ns}" data-sub="${sub}">+ 카테고리 추가</button>`;
+  board.appendChild(addRow);
+}
+
+function mkTaskEl(task, ns, sub, catId) {
+  const el = document.createElement('div');
+  const status = task.status || 'todo';
+  el.className = 'task-item' + (task._open?' open':'');
+  el.dataset.id = task.id; el.dataset.s = status;
+  const sLbl = {todo:'진행전',doing:'진행중',done:'완료'}[status];
+  el.innerHTML = `
+    <div class="task-main">
+      <button class="status-btn" data-s="${status}"
+        data-ns="${ns}" data-sub="${sub}" data-cat="${catId}" data-tid="${task.id}">${sLbl}</button>
+      <button class="task-text-btn" data-expand="${task.id}">
+        <span class="task-text">${esc(task.text)}</span>
+      </button>
+      <span class="expand-arr" data-expand="${task.id}">▾</span>
+      <button class="task-del" data-ns="${ns}" data-sub="${sub}" data-cat="${catId}" data-tid="${task.id}">×</button>
+    </div>
+    <div class="task-detail">
+      <div class="detail-body">
+        <div class="d-field sp2">
+          <span class="d-lbl">메모</span>
+          <textarea class="d-ta" placeholder="메모..."
+            data-field="memo" data-ns="${ns}" data-sub="${sub}" data-cat="${catId}" data-tid="${task.id}">${esc(task.memo)}</textarea>
+        </div>
+        <div class="d-field">
+          <span class="d-lbl">담당자</span>
+          <input class="d-inp" type="text" placeholder="이름" value="${esc(task.assignee)}"
+            data-field="assignee" data-ns="${ns}" data-sub="${sub}" data-cat="${catId}" data-tid="${task.id}" />
+        </div>
+        <div class="d-field">
+          <span class="d-lbl">기한</span>
+          <input class="d-inp" type="date" value="${esc(task.deadline)}"
+            data-field="deadline" data-ns="${ns}" data-sub="${sub}" data-cat="${catId}" data-tid="${task.id}" />
+        </div>
+      </div>
+    </div>`;
+  return el;
+}
+
+function setupBoardEvents(boardEl) {
+  boardEl.addEventListener('click', e => {
+    const sb     = e.target.closest('.status-btn');
+    const exp    = e.target.closest('.task-text-btn, .expand-arr');
+    const del    = e.target.closest('.task-del');
+    const add    = e.target.closest('.add-plus');
+    const catDel = e.target.closest('.cat-del');
+    const addCat = e.target.closest('.add-cat-btn');
+
+    if (sb) {
+      const {ns,sub,cat,tid} = sb.dataset;
+      const task = getNsTask(ns,sub,cat,tid); if (!task) return;
+      const cyc = ['todo','doing','done'];
+      const cur = cyc.includes(task.status) ? task.status : 'todo';
+      task.status = cyc[(cyc.indexOf(cur)+1)%3]; save();
+      const el = boardEl.querySelector(`.task-item[data-id="${tid}"]`);
+      const wasOpen = el.classList.contains('open');
+      const nel = mkTaskEl(task,ns,sub,cat);
+      if (wasOpen) nel.classList.add('open');
+      el.replaceWith(nel);
+      updCnt(ns,sub,cat); refreshProg(); return;
+    }
+    if (exp && !e.target.closest('.status-btn') && !e.target.closest('.task-del')) {
+      const tid = exp.dataset.expand;
+      const el = boardEl.querySelector(`.task-item[data-id="${tid}"]`);
+      if (el) el.classList.toggle('open'); return;
+    }
+    if (del) {
+      const {ns,sub,cat,tid} = del.dataset;
+      if (!confirm('삭제할까요?')) return;
+      const c = getNsCats(ns,sub).find(x=>x.id===cat);
+      c.tasks = c.tasks.filter(t=>t.id!==tid); save();
+      boardEl.querySelector(`.task-item[data-id="${tid}"]`).remove();
+      updCnt(ns,sub,cat); refreshProg(); return;
+    }
+    if (add) { const {ns,sub,cat} = add.dataset; addBoardTask(ns,sub,cat,boardEl); return; }
+    if (catDel) {
+      const {ns,sub,cat} = catDel.dataset;
+      if (!confirm('카테고리를 삭제할까요? 포함된 업무도 모두 삭제됩니다.')) return;
+      const cats = getNsCats(ns,sub);
+      const idx = cats.findIndex(c=>c.id===cat);
+      if (idx !== -1) cats.splice(idx,1);
+      save(); rerenderBoard(ns,sub); refreshProg(); return;
+    }
+    if (addCat) {
+      const {ns,sub} = addCat.dataset;
+      const nc = mkCat('새 카테고리');
+      getNsCats(ns,sub).push(nc); save();
+      rerenderBoard(ns,sub);
+      const titleEl = boardEl.querySelector(`.col-title[data-cat="${nc.id}"]`);
+      if (titleEl) {
+        titleEl.focus();
+        const range = document.createRange(); range.selectNodeContents(titleEl);
+        const sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(range);
+      }
+      refreshProg(); return;
+    }
+  });
+  boardEl.addEventListener('focusout', e => {
+    if (!e.target.classList.contains('col-title')) return;
+    const {ns,sub,cat} = e.target.dataset;
+    const c = getNsCats(ns,sub).find(x=>x.id===cat);
+    if (!c) return;
+    const t = e.target.textContent.trim();
+    if (t) { c.title = t; } else { e.target.textContent = c.title; }
+    save();
+  });
+  boardEl.addEventListener('paste', e => {
+    if (!e.target.classList.contains('col-title')) return;
+    e.preventDefault();
+    const text = (e.clipboardData || window.clipboardData).getData('text/plain');
+    document.execCommand('insertText', false, text);
+  });
+  boardEl.addEventListener('keydown', e => {
+    if (e.key === 'Enter') {
+      if (e.target.classList.contains('col-title')) { e.preventDefault(); e.target.blur(); return; }
+      if (e.target.classList.contains('add-in')) {
+        const {ns,sub,cat} = e.target.dataset; addBoardTask(ns,sub,cat,boardEl);
+      }
+    }
+  });
+  boardEl.addEventListener('input', e => {
+    const f = e.target.dataset.field; if (!f) return;
+    const {ns,sub,cat,tid} = e.target.dataset;
+    const t = getNsTask(ns,sub,cat,tid); if (t) { t[f] = e.target.value; save(); }
+  });
+}
+
+function getNsCats(ns,sub) {
+  if (ns==='q') return data.quarterly[sub].categories;
+  if (ns==='m') return data.monthly[sub].categories;
+  if (!data.weekly[sub]) { data.weekly[sub]={ categories:[] }; save(); }
+  return data.weekly[sub].categories;
+}
+function rerenderBoard(ns,sub) {
+  if (ns==='q') renderBoard('board-q', data.quarterly[sub].categories, 'q', sub);
+  else if (ns==='m') renderBoard('board-m', data.monthly[sub].categories, 'm', sub);
+  else renderBoard('week-board', data.weekly[sub].categories, 'w', sub);
+}
+function getNsTask(ns,sub,cat,tid) {
+  const c = getNsCats(ns,sub).find(x=>x.id===cat);
+  return c ? c.tasks.find(t=>t.id===tid) : null;
+}
+function addBoardTask(ns,sub,cat,boardEl) {
+  const inp = boardEl.querySelector(`.add-in[data-cat="${cat}"][data-sub="${sub}"]`);
+  const text = (inp?inp.value:'').trim(); if (!text) { if (inp) inp.focus(); return; }
+  const task = mkTask(text);
+  getNsCats(ns,sub).find(c=>c.id===cat).tasks.push(task); save();
+  document.getElementById(`tl-${ns}-${sub}-${cat}`).appendChild(mkTaskEl(task,ns,sub,cat));
+  if (inp) { inp.value=''; inp.focus(); }
+  updCnt(ns,sub,cat); refreshProg();
+}
+function updCnt(ns,sub,cat) {
+  const c = getNsCats(ns,sub).find(x=>x.id===cat);
+  const el = document.getElementById(`cnt-${ns}-${sub}-${cat}`);
+  if (el&&c) el.textContent = `${c.tasks.filter(t=>t.status==='done').length} / ${c.tasks.length} 완료`;
+}
+
+// ── Weekly ──
+function dStr(d) {
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+}
+function getMonday(offset) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  const day = t.getDay();
+  const diff = day===0 ? -6 : 1-day;
+  const m = new Date(t); m.setDate(t.getDate()+diff+(offset||0)*7);
+  return m;
+}
+function wkKey() { return dStr(getMonday(wkOffset)); }
+function todayStr() { return dStr(new Date()); }
+
+function initWeekly() {
+  document.getElementById('week-prev').addEventListener('click', () => { wkOffset--; renderWeek(); refreshProg(); });
+  document.getElementById('week-next').addEventListener('click', () => { wkOffset++; renderWeek(); refreshProg(); });
+  renderWeek();
+}
+
+function renderWeek() {
+  const mon = getMonday(wkOffset);
+  const sun = new Date(mon); sun.setDate(mon.getDate()+6);
+  const fmt  = d => `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  const fmtS = d => `${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  document.getElementById('week-lbl').textContent = `${fmt(mon)} — ${fmtS(sun)}`;
+
+  const key = wkKey();
+  if (!data.weekly[key] || !data.weekly[key].categories) {
+    data.weekly[key] = { categories: [] };
+    save();
+  }
+  renderBoard('week-board', data.weekly[key].categories, 'w', key);
+}
+
+// ── Init ──
+initAnnual();
+initQ();
+initM();
+initWeekly();
+setupBoardEvents(document.getElementById('board-q'));
+setupBoardEvents(document.getElementById('board-m'));
+setupBoardEvents(document.getElementById('week-board'));
+</script>
+</body>
+</html>
